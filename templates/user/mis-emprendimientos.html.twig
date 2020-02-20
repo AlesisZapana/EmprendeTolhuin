@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+{% block title %}Mis Emprendimientos{% endblock %}
+{% block body %}
+    {% for emprendimiento in emprendimientos %}
+        <div class="card" style="width: 18rem;">
+        {# si no hay imagen disponible, cargar una imagen del tamaño adecuado #}
+            {% if emprendimiento.fotos is not empty %}    
+            <img src="{{absolute_url('/uploads/imagenes/')}}{{emprendimiento.fotos[0]}}" class="card-img-top" alt="...">
+            {% endif %}
+            <div class="card-body">
+                <h5 class="card-title">{{emprendimiento.razonsocial}}</h5>
+                <p class="card-text">{{emprendimiento.descripcion}}</p>
+                <a href="{{ path('emprendimiento_show', {'id': emprendimiento.id}) }}" class="btn btn-primary">Ver</a>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}

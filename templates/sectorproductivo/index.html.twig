@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Sectorproductivo index{% endblock %}
+
+{% block body %}
+    <h1>Sectorproductivo index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for sectorproductivo in sectorproductivos %}
+            <tr>
+                <td>{{ sectorproductivo.id }}</td>
+                <td>{{ sectorproductivo.nombre }}</td>
+                <td>
+                    <a href="{{ path('sectorproductivo_show', {'id': sectorproductivo.id}) }}">show</a>
+                    <a href="{{ path('sectorproductivo_edit', {'id': sectorproductivo.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('sectorproductivo_new') }}">Create new</a>
+{% endblock %}

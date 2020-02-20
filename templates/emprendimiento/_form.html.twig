@@ -1,0 +1,11 @@
+{{ form_start(form) }}
+    <div class="col-lg-4 col-md-8 col-sm-12">
+    {{ form_widget(form) }}
+    </div>
+    <center>
+    <div class="col-lg-12 col-md-8 col-sm-12">
+    <div id="mapid"></div>
+    </div>
+    </center>
+    <button class="btn">{{ button_label|default('Crear') }}</button>
+{{ form_end(form) }}

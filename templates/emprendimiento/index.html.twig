@@ -1,0 +1,180 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Emprendimiento index{% endblock %}
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{absolute_url('/assets/openlayers/ol.css')}}" type="text/css">
+    <link rel="stylesheet" href="{{absolute_url('/assets/leaflet/leaflet.css')}}"/>
+    <script src="{{absolute_url('/assets/leaflet/leaflet.js')}}"></script>
+
+     {# <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+   integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+   crossorigin=""/>
+   <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+   integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+   crossorigin=""></script> #}
+
+    <style>
+       #mapid {
+        height: 400px;
+        /* width: 90%; */
+      }
+      .leaflet-fade-anim .leaflet-container { will-change: transform !important; }
+      .leaflet-zoom-animated{will-change: transform !important;}
+    </style>
+{% endblock %}
+{% block body %}
+
+ 
+{# ------------- #}
+    <div class="container">
+        <h1>Emprendimientos de Tolhuin</h1>
+        {# <h1>{{direccion}}</h1> #}
+        <!-- Heading Row -->
+        
+        <div class="row col-lg-2">
+
+        <select class="custom-select"name="rubro" id="rubros_filtro">
+            <option selected>Todos</option>
+            {% for rubro in rubros|sort((a, b) => a.tipo <=> b.tipo) %}
+                <option value="{{rubro.tipo}}">{{rubro.tipo}}</option>
+            {% endfor %}
+        </select>
+        
+        </div>
+        <div class="row align-items-center my-5">
+
+            <div class="col-lg-12">
+                <div id="mapid"></div>
+            </div>
+            
+        </div>
+        <!-- /.row -->
+
+{# ------------- #}
+        {% if is_granted('ROLE_INVESTIGADOR') %}<a href="{{ path('emprendimiento_new') }}">Nuevo emprendimiento</a>{% endif %}        
+        <a class="btn btn-secondary" target="_blank" href="{{ path('emprendimientos_pdf_descarga', {'rubro': "Todos"}) }}" id="boton_id">Descargar PDF</a>
+        <a class="btn btn-secondary" target="_blank" href="{{ path('emprendimientos_xls_descarga', {'rubro': "Todos"}) }}" id="boton_xls">Descargar XLS</a>
+        <a class="btn btn-secondary" target="_blank" href="{{ path('emprendimientos_csv_descarga', {'rubro': "Todos"}) }}" id="boton_csv">Descargar CSV</a>
+
+        {% if is_granted('ROLE_MUNICIPIO') %}
+            <div class="col-lg-12 col-md-6 col-sm-8">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Razon Social</th>
+                            <th>Direccion</th>
+                            {# <th>Rubro</th>#}
+                            <th>actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for emprendimiento in emprendimientos %}
+                        <tr>
+                            <td>{{ emprendimiento.razonsocial }}</td>
+                            <td>{{ emprendimiento.direccion }}</td>
+                            {# <td>{{ emprendimiento.rubro }}</td>#}
+                            <td>
+                                <a href="{{ path('emprendimiento_show', {'id': emprendimiento.id}) }}">show</a>
+                                <a href="{{ path('emprendimiento_edit', {'id': emprendimiento.id}) }}">edit</a>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="5">no records found</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
+    </div>
+    
+    {% block javascripts %}
+        
+        <script type="text/javascript">
+            var map = L.map('mapid').setView([-54.5094,-67.1976 ], 14);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+
+        </script>
+        
+        <script type="text/javascript">
+            var emprendimientos
+            var rubros
+            var marcadores=L.layerGroup().addTo(map)
+            var rubroSeleccionado="Todos"
+            var link
+            var link_xls
+            var link_csv
+            fetch('https://192.168.2.111:8000/api/emprendimientos')
+                .then(function(response) {
+                    return response.json();
+                })
+                .then(function(myJson) {
+                    emprendimientos=myJson;
+                    
+                    emprendimientos.forEach(emprendimiento => {
+                        var customPopup="<br/><a href='emprendimiento/"+emprendimiento.id+"'>Ver</a>";
+                        L.marker([emprendimiento.latitud,emprendimiento.longitud]).addTo(marcadores)
+                            .bindPopup(emprendimiento.razon_social+' - '+emprendimiento.direccion + customPopup )
+                        });
+                });
+
+                fetch('https://192.168.2.111:8000/api/rubros')
+                    .then(function(response) {
+                        return response.json();
+                    })
+                    .then(function(rubrosJson) {
+                        rubros=rubrosJson;
+                    });
+                
+                $(document).ready(function() {
+                    $("select#rubros_filtro").change(function() {
+                        var seleccionado=$(this).children("option:selected").val();
+
+                        //limpiar el mapa
+                        marcadores.clearLayers();
+                        if (seleccionado=="Todos") {
+                            rubroSeleccionado=seleccionado
+                            emprendimientos.forEach(emprendimiento => {
+                                var customPopup="<br/><a href='emprendimiento/"+emprendimiento.id+"'>Ver</a>";
+                                L.marker([emprendimiento.latitud,emprendimiento.longitud]).addTo(marcadores)
+                                .bindPopup(emprendimiento.razon_social+' - '+emprendimiento.direccion+ customPopup)
+                            });
+                        }else{
+                            rubroSeleccionado=seleccionado
+
+                            link='{{ path("emprendimientos_pdf_descarga", {'rubro': 'rubro_nombre'}) }}';
+                            link = link.replace("rubro_nombre",rubroSeleccionado);
+                            var a=document.getElementById('boton_id');
+                            a.href=link;
+
+                            link_xls='{{ path("emprendimientos_xls_descarga", {'rubro': 'rubro_nombre'}) }}';
+                            link_xls = link_xls.replace("rubro_nombre",rubroSeleccionado);
+                            var a=document.getElementById('boton_xls');
+                            a.href=link_xls;
+
+                            link_csv='{{ path("emprendimientos_csv_descarga", {'rubro': 'rubro_nombre'}) }}';
+                            link_csv = link_csv.replace("rubro_nombre",rubroSeleccionado);
+                            var a=document.getElementById('boton_csv');
+                            a.href=link_csv;
+
+                            emprendimientos.forEach(emprendimiento => {                        
+                                //seleccionar los emprendimientos que cumplan con la condicion
+                                var customPopup="<br/><a href='emprendimiento/"+emprendimiento.id+"'>Ver</a>";
+                                if(emprendimiento.rubro==seleccionado){
+                                    L.marker([emprendimiento.latitud,emprendimiento.longitud]).addTo(marcadores)
+                                        .bindPopup(emprendimiento.razon_social+' - '+emprendimiento.direccion + customPopup)
+                                }
+                            });
+                            }
+                        });
+    
+                    });
+
+
+        </script>
+
+    {% endblock %}
+{% endblock %}

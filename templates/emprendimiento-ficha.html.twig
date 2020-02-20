@@ -1,0 +1,57 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{{ emprendimiento.razonsocial }}</title>
+        <style>
+        table, th, td {
+           border: 1px solid black;
+        }
+        th, td {
+            padding: 10px;
+        }
+        </style>
+    </head>
+    <body>
+        <h1>{{ emprendimiento.razonsocial }}</h1>
+        {% if emprendimiento.fotos is not empty %}
+            <img src="uploads/imagenes/{{emprendimiento.fotos[0]}}" height="300">
+        {% endif %}
+        {# <img src="https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_92x30dp.png"/> #}
+        <table class="table">
+            <tbody>
+                <tr>
+                    <th>Razon Social:</th>
+                    <td>{{ emprendimiento.razonsocial }}</td>
+                </tr>
+                <tr>
+                    <th>Direccion:</th>
+                    <td>{{ emprendimiento.direccion }}</td>
+                </tr>
+                <tr>
+                    <th>CUIT:</th>
+                    <td>{{ emprendimiento.cuit }}</td>
+                </tr>
+                <tr>
+                    <th>Rubro:</th>
+                    <td>{{ emprendimiento.rubro }}</td>
+                </tr>
+                <tr>
+                    <th>Ámbito:</th>
+                    <td>{{ emprendimiento.ambito }}</td>
+                </tr>
+                <tr>
+                    <th>Descripción:</th>
+                    <td>{{ emprendimiento.descripcion }}</td>
+                </tr>
+                <tr>
+                    <th>Latitud:</th>
+                    <td>{{ emprendimiento.latitud }}</td>
+                </tr>
+                <tr>
+                    <th>Longitud:</th>
+                    <td>{{ emprendimiento.longitud }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </body>
+</html>

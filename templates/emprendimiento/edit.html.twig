@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Editar Emprendimiento{% endblock %}
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{absolute_url('/assets/openlayers/ol.css')}}" type="text/css">
+    <link rel="stylesheet" href="{{absolute_url('/assets/leaflet/leaflet.css')}}"/>
+    <script src="{{absolute_url('/assets/leaflet/leaflet.js')}}"></script>
+    <style>
+        #mapid {
+            height: 400px;
+            width: 90%;
+        }
+    </style>
+{% endblock %}
+{% block body %}
+    <h1>Editar Emprendimiento</h1>
+
+    {{ include('emprendimiento/_form.html.twig', {'button_label': 'Update'}) }}
+    {{ include('emprendimiento/_delete_form.html.twig') }}
+
+    <a href="{{ path('emprendimiento_index') }}">Volver a la lista</a>
+
+{% endblock %}
+{% block javascripts %}
+    <script type="text/javascript">
+        var map = L.map('mapid').setView([{{emprendimiento.latitud}},{{emprendimiento.longitud}} ], 14);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+    </script>
+    <script>
+        // L.marker([-54.5094,-67.1976],{
+        //     draggable: true,
+        // }).addTo(map)
+        //     .on('dragend',function(event) {
+        //         var position=
+        //     })
+        marcador = L.marker([{{emprendimiento.latitud}},{{emprendimiento.longitud}}],{
+            draggable: true,
+        })
+        marcador.addTo(map)
+        marcador.on('dragend',function (event) {
+            var marker=event.target;
+            var pos=marker.getLatLng();
+            document.getElementById('emprendimiento_latitud').value=pos.lat;
+            document.getElementById('emprendimiento_longitud').value=pos.lng;
+        })
+            //.bindPopup(emprendimiento.descripcion)                            
+    </script>
+{% endblock %}

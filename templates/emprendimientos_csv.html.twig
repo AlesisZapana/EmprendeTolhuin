@@ -1,0 +1,5 @@
+{% for header in headers %}{{header}},{% endfor %}
+
+{% for emprendimiento in emprendimientos %}
+"{{emprendimiento.razonsocial}}","{{emprendimiento.direccion}}","{{emprendimiento.rubro}}","{{emprendimiento.ambito}}",{{emprendimiento.latitud}},{{emprendimiento.longitud}}
+{% endfor %}

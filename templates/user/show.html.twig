@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Usuario {{usuario.username}}{% endblock %}
+
+{% block body %}
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Nombre de usuario</th>
+                <td>{{ usuario.username }}</td>
+            </tr>
+            <tr>
+                <th>Roles</th>
+                <td>
+                    {% for rol in usuario.roles %}
+                        [{{rol}}]
+                    {% endfor %}
+                </td>
+            </tr>
+        </tbody>
+    </table>    
+
+    <a class="btn btn-primary" href="{{ path('usuarios_lista') }}">Volver a la lista de usuarios</a>
+
+    {# <a class="btn btn-primary" href="{{ path('usuario_edit', {'id': usuario.id}) }}">editar</a> #}
+    <a class="btn btn-primary" href="{{ path('usuario_edit_personal') }}">editar</a>
+
+{% endblock %}

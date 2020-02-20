@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Sectorproductivo{% endblock %}
+
+{% block body %}
+    <h1>Edit Sectorproductivo</h1>
+
+    {{ include('sectorproductivo/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('sectorproductivo_index') }}">back to list</a>
+
+    {{ include('sectorproductivo/_delete_form.html.twig') }}
+{% endblock %}

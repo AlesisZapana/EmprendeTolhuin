@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Usuarios registrados{% endblock %}
+
+{% block body %}
+    <a href="{{path('usuario_show_personal')}}">Mi usuario</a>
+    <a href="{{path('usuario_edit_personal')}}">Editar Mi usuario</a>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Roles</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for usuario in usuarios %}
+            <tr>
+                <td>{{usuario.username}}</td>
+                <td>
+                    {% for rol in usuario.roles %}
+                        [{{rol}}]
+                    {% endfor %}
+                </td>
+                <td>
+                    <a href="{{ path('usuario_show', {'id': usuario.id}) }}">show</a>
+                    <a href="{{ path('usuario_edit', {'id': usuario.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

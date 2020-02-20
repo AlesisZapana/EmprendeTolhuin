@@ -1,0 +1,41 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Emprendimientos</title>
+        <style>
+        table, th, td {
+           border: 1px solid black;
+        }
+        th, td {
+            padding: 5px;
+        }
+        </style>
+    </head>
+    <body>
+        <h1>Emprendimientos: {{ emprendimientos|length }} </h1>
+        <table class="table">
+                <thead>
+                    <tr>
+                        <th>Razon Social</th>
+                        <th>Direccion</th>
+                        <th>Rubro</th>
+                        <th>Ambito</th>
+                        <th>Latitud</th>
+                        <th>Longitud</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for emprendimiento in emprendimientos %}
+                    <tr>
+                        <td>{{ emprendimiento.razonsocial }}</td>
+                        <td>{{ emprendimiento.direccion }}</td>
+                        <td>{{ emprendimiento.rubro }}</td>
+                        <td>{{emprendimiento.ambito}}</td>
+                        <td>{{emprendimiento.latitud}}</td>
+                        <td>{{emprendimiento.longitud}}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+    </body>
+</html>

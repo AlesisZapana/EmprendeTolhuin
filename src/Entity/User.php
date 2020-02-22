@@ -43,6 +43,21 @@ class User implements UserInterface
      */
     private $emprendimientos;
 
+    /**
+     * @ORM\Column(type="string", length=50, nullable=true)
+     */
+    private $apellido;
+
+    /**
+     * @ORM\Column(type="string", length=50, nullable=true)
+     */
+    private $nombre;
+
+    /**
+     * @ORM\Column(type="bigint", nullable=true)
+     */
+    private $dni;
+
     public function __construct()
     {
         $this->emprendimientos = new ArrayCollection();
@@ -154,5 +169,41 @@ class User implements UserInterface
 
     public function __toString(){
         return $this->getUsername();
+    }
+
+    public function getApellido(): ?string
+    {
+        return $this->apellido;
+    }
+
+    public function setApellido(?string $apellido): self
+    {
+        $this->apellido = $apellido;
+
+        return $this;
+    }
+
+    public function getNombre(): ?string
+    {
+        return $this->nombre;
+    }
+
+    public function setNombre(?string $nombre): self
+    {
+        $this->nombre = $nombre;
+
+        return $this;
+    }
+
+    public function getDni(): ?string
+    {
+        return $this->dni;
+    }
+
+    public function setDni(?string $dni): self
+    {
+        $this->dni = $dni;
+
+        return $this;
     }
 }

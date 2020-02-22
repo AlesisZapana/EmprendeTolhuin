@@ -12,6 +12,7 @@ use App\Entity\User;
 use Symfony\Component\HttpFoundation\Request;
 use App\Form\RegistrationFormType;
 use Symfony\Component\Security\Core\Security;
+use App\Form\EmprendedorType;
 
 class SecurityController extends AbstractController
 {
@@ -63,8 +64,7 @@ class SecurityController extends AbstractController
     }
 
     /**
-     * @IsGranted("ROLE_EMPRENDEDOR")
-     * @IsGranted("ROLE_INVESTIGADOR")
+     * @IsGranted({"ROLE_EMPRENDEDOR","ROLE_INVESTIGADOR"})
      * @Route("/usuario", name="usuario_show_personal", methods={"GET"})
      */
     public function usuario_show_personal(Security $security): Response
@@ -94,18 +94,18 @@ class SecurityController extends AbstractController
             'mensaje'=> 'Editar usuario',
             'usuario' => $usuario,
             'registrationForm' => $form->createView(),
+            'botontext'=>'Editar usuario',
         ]);
     }
 
     /**
-     * @IsGranted("ROLE_EMPRENDEDOR")
-     * @IsGranted("ROLE_INVESTIGADOR")
+     * @IsGranted({"ROLE_EMPRENDEDOR","ROLE_INVESTIGADOR"})
      * @Route("/user/editar", name="usuario_edit_personal", methods={"GET","POST"})
      */
     public function edit_personal(Request $request,Security $security): Response
     {
         $usuario=$security->getUser();
-        $form = $this->createForm(RegistrationFormType::class, $usuario);
+        $form = $this->createForm(EmprendedorType::class, $usuario);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -118,6 +118,7 @@ class SecurityController extends AbstractController
             'mensaje'=> 'Editar mi usuario',
             'usuario' => $usuario,
             'registrationForm' => $form->createView(),
+            'botontext'=>'Actualizar usuario',
         ]);
     }
 

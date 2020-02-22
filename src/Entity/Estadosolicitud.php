@@ -7,9 +7,10 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\SectorproductivoRepository")
+ * @ORM\Table(name="estadosolicitudes")
+ * @ORM\Entity(repositoryClass="App\Repository\EstadosolicitudRepository")
  */
-class Sectorproductivo
+class Estadosolicitud
 {
     /**
      * @ORM\Id()
@@ -19,12 +20,12 @@ class Sectorproductivo
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=100)
+     * @ORM\Column(type="string", length=20)
      */
     private $nombre;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Solicitud", mappedBy="sectorproductivo")
+     * @ORM\OneToMany(targetEntity="App\Entity\Solicitud", mappedBy="estado")
      */
     private $solicitudes;
 
@@ -50,10 +51,6 @@ class Sectorproductivo
         return $this;
     }
 
-	public function __toString() {
-                        		return $this->getNombre();
-                        	}
-
     /**
      * @return Collection|Solicitud[]
      */
@@ -66,7 +63,7 @@ class Sectorproductivo
     {
         if (!$this->solicitudes->contains($solicitude)) {
             $this->solicitudes[] = $solicitude;
-            $solicitude->setSectorproductivo($this);
+            $solicitude->setEstado($this);
         }
 
         return $this;
@@ -77,11 +74,15 @@ class Sectorproductivo
         if ($this->solicitudes->contains($solicitude)) {
             $this->solicitudes->removeElement($solicitude);
             // set the owning side to null (unless already changed)
-            if ($solicitude->getSectorproductivo() === $this) {
-                $solicitude->setSectorproductivo(null);
+            if ($solicitude->getEstado() === $this) {
+                $solicitude->setEstado(null);
             }
         }
 
         return $this;
+    }
+
+    public function __toString() {
+        return $this->getNombre();
     }
 }

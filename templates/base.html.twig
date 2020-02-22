@@ -30,6 +30,12 @@
                 {% endif %}
                 {% if is_granted('ROLE_MUNICIPIO') %}
                     <li class="nav-item">
+                    <a class="nav-link" href="{{path('estadosolicitud_index')}}">SolicitudesEstado</a>
+                    </li>
+                    <li class="nav-item">
+                    <a class="nav-link" href="{{path('solicitud_index')}}">Solicitudes</a>
+                    </li>
+                    <li class="nav-item">
                     <a class="nav-link" href="{{path('usuarios_lista')}}">Usuarios</a>
                     </li>
                     <li class="nav-item">
@@ -53,7 +59,7 @@
                 {% if app.user %}
 
                 {% else %}
-                <a class="nav-link" href="#">Registrate</a>
+                <a class="nav-link" href="{{path('solicitud_new')}}">Registrate</a>
                 {% endif %}                    
                 </li>
             </ul>

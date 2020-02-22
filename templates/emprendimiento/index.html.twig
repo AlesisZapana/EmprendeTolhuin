@@ -107,6 +107,7 @@
             var link
             var link_xls
             var link_csv
+            //cambiar la ip
             fetch('https://192.168.2.111:8000/api/emprendimientos')
                 .then(function(response) {
                     return response.json();
@@ -120,7 +121,7 @@
                             .bindPopup(emprendimiento.razon_social+' - '+emprendimiento.direccion + customPopup )
                         });
                 });
-
+                //cambiar la ip
                 fetch('https://192.168.2.111:8000/api/rubros')
                     .then(function(response) {
                         return response.json();

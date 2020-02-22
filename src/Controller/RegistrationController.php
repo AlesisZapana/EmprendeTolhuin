@@ -52,6 +52,7 @@ class RegistrationController extends AbstractController
         return $this->render('registration/register.html.twig', [
             'mensaje'=> 'Nuevo usuario',
             'registrationForm' => $form->createView(),
+            'botontext'=>'Crear usuario',
         ]);
     }
 }

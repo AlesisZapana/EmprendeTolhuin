@@ -13,7 +13,7 @@ use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
-class RegistrationFormType extends AbstractType
+class EmprendedorType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -40,24 +40,10 @@ class RegistrationFormType extends AbstractType
                     ]),
                     new Length([
                         'min' => 6,
-                        'minMessage' => 'Your password should be at least {{ limit }} characters',
+                        'minMessage' => 'La contraseña debe ser de por lo menos {{ limit }} caracteres',
                         // max length allowed by Symfony for security reasons
                         'max' => 4096,
                     ]),
-                ],
-            ])
-            ->add('roles',ChoiceType::class,[
-                'constraints'=>[
-                    new NotBlank(),
-                ],
-                'multiple'=>true,
-                'expanded'=>true,
-                'required'=>true,
-                'choices'=>[
-                    'Administrador'=>'ROLE_ADMIN',
-                    'Municipio'=>'ROLE_MUNICIPIO',
-                    'Investigador'=>'ROLE_INVESTIGADOR',
-                    'Emprendedor'=>'ROLE_EMPRENDEDOR',
                 ],
             ])
         ;

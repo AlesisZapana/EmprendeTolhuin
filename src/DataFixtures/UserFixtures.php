@@ -20,17 +20,19 @@ class UserFixtures extends Fixture
     {
         // $product = new Product();
         // $manager->persist($product);
-        $user=new User();
-        $user->setUsername('alesis');
-        $user->setRoles([
-            'ROLE_ADMIN',
-            'ROLE_EMPRENDEDOR'
-        ]);
-        $user->setPassword($this->passwordEncoder->encodePassword(
-            $user,
-            '123456'
-        ));
-        $manager->persist($user);
-        $manager->flush();
+        // $user=new User();
+        // $user->setUsername('alesis');
+        // $user->setRoles([
+        //     'ROLE_ADMIN',
+        //     'ROLE_EMPRENDEDOR'
+        // ]);
+        // $user->setPassword($this->passwordEncoder->encodePassword(
+        //     $user,
+        //     '123456'
+        // ));
+        // $manager->persist($user);
+        // $manager->flush();
+
+        
     }
 }

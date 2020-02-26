@@ -62,27 +62,27 @@
         </tbody>
     </table>
 
-    <a href="{{ path('solicitud_index') }}">Volver a lista</a>
+    <a class="btn btn-primary" href="{{ path('solicitud_index') }}">Volver a lista</a>
 
-    <a href="{{ path('solicitud_edit', {'id': solicitud.id}) }}">Editar</a>
+    <a class="btn btn-primary" href="{{ path('solicitud_edit', {'id': solicitud.id}) }}">Editar</a>
 
     {# redirige a la creación de usuario #}
-    <a href="{{path('solicitud_emprendedor',{'id':solicitud.id})}}">Crear Usuario</a>
+    <a class="btn btn-primary" href="{{path('solicitud_emprendedor',{'id':solicitud.id})}}">Crear Usuario</a>
 
     {# redirige a la creación de emprendimiento #}
-    <a href="{{path('solicitud_emprendimiento',{'id':solicitud.id})}}">Crear Emprendimiento</a>
+    <a class="btn btn-primary" href="{{path('solicitud_emprendimiento',{'id':solicitud.id})}}">Crear Emprendimiento</a>
 
     {% if solicitud.estado=="Pendiente" %}
         {# aprueba la solicitud #}
         {# <a href="{{path('solicitud_aprobar',{'id':solicitud.id})}}">Aprobar Solicitud</a> #}
-        <form method="post" action="{{ path('solicitud_aprobar', {'id': solicitud.id}) }}">
+        <form method="post" action="{{ path('solicitud_aprobar', {'id': solicitud.id}) }}" onsubmit="return confirm('Seguro que desea aprobar esta solicitud?');">
             <input type="hidden" name="_method" value="POST">
             <input type="hidden" name="_token" value="{{ csrf_token('update' ~ solicitud.id) }}">
             <button class="btn">Aprobar solicitud</button>
         </form>
 
         {# rechaza la solicitud #}
-        <form method="post" action="{{ path('solicitud_rechazar', {'id': solicitud.id}) }}">
+        <form method="post" action="{{ path('solicitud_rechazar', {'id': solicitud.id}) }}" onsubmit="return confirm('Seguro que desea rechazar esta solicitud?');">
             <input type="hidden" name="_method" value="POST">
             <input type="hidden" name="_token" value="{{ csrf_token('rechazar' ~ solicitud.id) }}">
             <button class="btn">Rechazar solicitud</button>

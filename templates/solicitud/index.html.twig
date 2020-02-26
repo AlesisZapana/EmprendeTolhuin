@@ -4,6 +4,7 @@
 
 {% block body %}
     <h1>Solicitudes</h1>
+    <a href="{{ path('solicitud_new') }}">Crear nuevo</a>
 
     <table class="table">
         <thead>
@@ -46,6 +47,4 @@
         {% endfor %}
         </tbody>
     </table>
-
-    <a href="{{ path('solicitud_new') }}">Create new</a>
 {% endblock %}

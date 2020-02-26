@@ -135,6 +135,7 @@ class SolicitudController extends AbstractController
         }
 
         return $this->render('registration/register.html.twig', [
+            'botontext'=>'Crear Emprendedor',
             'mensaje'=> 'Nuevo Emprendedor',
             'registrationForm' => $form->createView(),
         ]);

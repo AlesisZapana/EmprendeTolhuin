@@ -66,27 +66,10 @@
                 <a class="btn btn-secondary" target="_blank" href="{{ path('emprendimientos_descargar', {'formato':"csv",'rubro': "Todos",'sector':"Todos"}) }}" id="boton_csv">Descargar CSV</a>
             </div>
         </div>
-        {# https://uomsanmartin.org.ar/site/wp-content/uploads/2016/01/1-600x400.jpg #}
-        
-        {# <div class="row">
-            {% for emprendimiento in emprendimientos %}
-            <div class="col col-lg-3 col-md-6 col-sm-1">
-                <div class="card" style="width: 18rem;">
-                    <img class="card-img-top" src="https://uomsanmartin.org.ar/site/wp-content/uploads/2016/01/1-600x400.jpg" alt="Card image cap">
-                    <div class="card-body">
-                        <h5 class="card-title">{{emprendimiento.razonsocial}}</h5>
-                        <p class="card-text">{{emprendimiento.descripcion}}</p>
-                        <a href="#" class="btn btn-primary">Go somewhere</a>
-                    </div>
-                </div>            
-            </div>
-            {% endfor %}
-        </div> #}
-        {# <center> #}
+
             <div class="row" id="emprendimientos_cards">
             </div>
-        {# </center> #}
-    {# </div> #}
+
     
     {% block javascripts %}
         
@@ -117,6 +100,36 @@
                 return link;
             }
 
+            function cards(emprendimientos) {
+                var card
+                emprendimientos.forEach(emprendimiento => {
+                    fotos=emprendimiento.fotos
+                    var url_card_foto='https://uomsanmartin.org.ar/site/wp-content/uploads/2016/01/1-600x400.jpg'
+                    if (Array.isArray(fotos)&&fotos.length) {
+                        url_card_foto='{{absolute_url('uploads/imagenes/')}}'+fotos[0].nombre_foto
+                    }
+
+                    var title="<b>"+emprendimiento.razon_social+"</b><br/>"
+                    var direccion="<b>"+emprendimiento.direccion+"</b><br/>"
+                    var customPopup="<br/><a href='emprendimiento/"+emprendimiento.id+"'>Ver</a>";
+                    L.marker([emprendimiento.latitud,emprendimiento.longitud]).addTo(marcadores)
+                        .bindPopup(title +direccion+ emprendimiento.descripcion + customPopup)
+                    
+                    card+=`<div class='col-lg-3 col-md-6 col-sm-1'>
+                            <div class='card' style='width: 18rem;'>
+                                <img class='card-img-top' src='${url_card_foto}' alt='${emprendimiento.razon_social}' height="130">
+                                <div class='card-body'>
+                                    <h5 class='card-title'>${emprendimiento.razon_social}</h5>
+                                    <p class='card-text'>${emprendimiento.descripcion}</p>
+                                    <a href='/emprendimiento/${emprendimiento.id}' class='btn btn-primary'>Ver</a>
+                                </div>
+                            </div>            
+                        </div>` 
+                    // $('div#emprendimientos_cards').append(card);
+                });
+                return card;
+            }
+
             //cambiar la ip
             fetch('https://192.168.2.111:8000/api/emprendimientos')
                 .then(function(response) {
@@ -125,31 +138,9 @@
                 .then(function(myJson) {
                     emprendimientos=myJson;
                     emprendimientosSeleccionados=emprendimientos;
-                    emprendimientos.forEach(emprendimiento => {
-                        fotos=emprendimiento.fotos
-                        var url_card_foto='https://uomsanmartin.org.ar/site/wp-content/uploads/2016/01/1-600x400.jpg'
-                        if (Array.isArray(fotos)&&fotos.length) {
-                            url_card_foto='{{absolute_url('uploads/imagenes/')}}'+fotos[0].nombre_foto
-                        }
-
-                        var title="<b>"+emprendimiento.razon_social+"</b><br/>"
-                        var direccion="<b>"+emprendimiento.direccion+"</b><br/>"
-                        var customPopup="<br/><a href='emprendimiento/"+emprendimiento.id+"'>Ver</a>";
-                        L.marker([emprendimiento.latitud,emprendimiento.longitud]).addTo(marcadores)
-                            .bindPopup(title +direccion+ emprendimiento.descripcion + customPopup)
-                        
-                        var card=`<div class='col-lg-3 col-md-6 col-sm-1'>
-                                <div class='card' style='width: 18rem;'>
-                                    <img class='card-img-top' src='${url_card_foto}' alt='${emprendimiento.razon_social}' height="130">
-                                    <div class='card-body'>
-                                        <h5 class='card-title'>${emprendimiento.razon_social}</h5>
-                                        <p class='card-text'>${emprendimiento.descripcion}</p>
-                                        <a href='/emprendimiento/${emprendimiento.id}' class='btn btn-primary'>Ver</a>
-                                    </div>
-                                </div>            
-                            </div>` 
-                        $('div#emprendimientos_cards').append(card);
-                    });                    
+                    var tarjetas=cards(emprendimientos);
+                    $('div#emprendimientos_cards').append(tarjetas);
+                                     
                     
                 });
                 //cambiar la ip
@@ -181,31 +172,8 @@
                             }else{
                                 emprendimientosSeleccionados=emprendimientos.filter(emprendimiento=>emprendimiento.sector==sectorSeleccionado);
                             }
-                            emprendimientosSeleccionados.forEach(emprendimiento => {
-                            fotos=emprendimiento.fotos
-                            var url_card_foto='https://uomsanmartin.org.ar/site/wp-content/uploads/2016/01/1-600x400.jpg'
-                            if (Array.isArray(fotos)&&fotos.length) {
-                                url_card_foto='{{absolute_url('uploads/imagenes/')}}'+fotos[0].nombre_foto
-                            }
-                            
-                            var title="<b>"+emprendimiento.razon_social+"</b><br/>"
-                            var direccion="<b>"+emprendimiento.direccion+"</b><br/>"
-                                var customPopup="<br/><a href='emprendimiento/"+emprendimiento.id+"'>Ver</a>";
-                                L.marker([emprendimiento.latitud,emprendimiento.longitud]).addTo(marcadores)
-                                .bindPopup(title+direccion+emprendimiento.descripcion+ customPopup)
-                            
-                                var card=`<div class='col-lg-3 col-md-6 col-sm-1'>
-                                    <div class='card' style='width: 18rem;'>
-                                        <img class='card-img-top' src='${url_card_foto}' alt='${emprendimiento.razon_social}' height='130'>
-                                        <div class='card-body'>
-                                            <h5 class='card-title'>${emprendimiento.razon_social}</h5>
-                                            <p class='card-text'>${emprendimiento.descripcion}</p>
-                                            <a href='/emprendimiento/${emprendimiento.id}' class='btn btn-primary'>Ver</a>
-                                        </div>
-                                    </div>            
-                                </div>` 
-                                $('div#emprendimientos_cards').append(card);       
-                            });
+                            var tarjetas=cards(emprendimientosSeleccionados);
+                            $('div#emprendimientos_cards').append(tarjetas);
                         }else{
                             rubroSeleccionado=seleccionado
 
@@ -232,32 +200,9 @@
                                         emprendimiento.sector==sectorSeleccionado&&emprendimiento.rubro==rubroSeleccionado
                                 );
                             }
-                            emprendimientosSeleccionados.forEach(emprendimiento => {                        
-                                fotos=emprendimiento.fotos
-                                var url_card_foto='https://uomsanmartin.org.ar/site/wp-content/uploads/2016/01/1-600x400.jpg'
-                                if (Array.isArray(fotos)&&fotos.length) {
-                                    url_card_foto='{{absolute_url('uploads/imagenes/')}}'+fotos[0].nombre_foto
-                                }
-                                    emprendimientosSeleccionados.push(emprendimiento);
-                                    var title="<b>"+emprendimiento.razon_social+"</b><br/>"
-                                    var direccion="<b>"+emprendimiento.direccion+"</b><br/>"
-                                    var customPopup="<br/><a href='emprendimiento/"+emprendimiento.id+"'>Ver</a>";
-                                    L.marker([emprendimiento.latitud,emprendimiento.longitud]).addTo(marcadores)
-                                        .bindPopup(title+direccion+emprendimiento.descripcion + customPopup)
-
-                                    var card=`<div class='col-lg-3 col-md-6 col-sm-6'>
-                                        <div class='card' style='width: 18rem;'>
-                                            <img class='card-img-top' src='${url_card_foto}' alt='${emprendimiento.razon_social}' height='140'>
-                                            <div class='card-body'>
-                                                <h5 class='card-title'>${emprendimiento.razon_social}</h5>
-                                                <p class='card-text'>${emprendimiento.descripcion}</p>
-                                                <a href='/emprendimiento/${emprendimiento.id}' class='btn btn-primary'>Ver</a>
-                                            </div>
-                                        </div>            
-                                    </div>` 
-                                    $('div#emprendimientos_cards').append(card);                                    
-                            });
-                            }
+                            var tarjetas=cards(emprendimientosSeleccionados);
+                            $('div#emprendimientos_cards').append(tarjetas);
+                        }
                     });
 
                     $("select#sectores_filtro").change(function() {
@@ -286,30 +231,8 @@
                             }else{
                                 emprendimientosSeleccionados=emprendimientos.filter(emprendimiento=>emprendimiento.rubro==rubroSeleccionado);
                             }
-                            emprendimientosSeleccionados.forEach(emprendimiento => {
-                            fotos=emprendimiento.fotos
-                            var url_card_foto='https://uomsanmartin.org.ar/site/wp-content/uploads/2016/01/1-600x400.jpg'
-                            if (Array.isArray(fotos)&&fotos.length) {
-                                url_card_foto='{{absolute_url('uploads/imagenes/')}}'+fotos[0].nombre_foto
-                            }
-                            var title="<b>"+emprendimiento.razon_social+"</b><br/>"
-                            var direccion="<b>"+emprendimiento.direccion+"</b><br/>"
-                                var customPopup="<br/><a href='emprendimiento/"+emprendimiento.id+"'>Ver</a>";
-                                L.marker([emprendimiento.latitud,emprendimiento.longitud]).addTo(marcadores)
-                                .bindPopup(title+direccion+emprendimiento.descripcion+ customPopup)
-                            
-                                var card=`<div class='col-lg-3 col-md-6 col-sm-1'>
-                                    <div class='card' style='width: 18rem;'>
-                                        <img class='card-img-top' src='${url_card_foto}' alt='${emprendimiento.razon_social}' height='130'>
-                                        <div class='card-body'>
-                                            <h5 class='card-title'>${emprendimiento.razon_social}</h5>
-                                            <p class='card-text'>${emprendimiento.descripcion}</p>
-                                            <a href='/emprendimiento/${emprendimiento.id}' class='btn btn-primary'>Ver</a>
-                                        </div>
-                                    </div>            
-                                </div>` 
-                                $('div#emprendimientos_cards').append(card);       
-                            });
+                            var tarjetas=cards(emprendimientosSeleccionados);
+                            $('div#emprendimientos_cards').append(tarjetas);
                         }else{
                             sectorSeleccionado=seleccionado
 
@@ -336,37 +259,11 @@
                                         emprendimiento.sector==sectorSeleccionado&&emprendimiento.rubro==rubroSeleccionado
                                 );
                             }
-                            emprendimientosSeleccionados.forEach(emprendimiento => {                        
-                                fotos=emprendimiento.fotos
-                                var url_card_foto='https://uomsanmartin.org.ar/site/wp-content/uploads/2016/01/1-600x400.jpg'
-                                if (Array.isArray(fotos)&&fotos.length) {
-                                    url_card_foto='{{absolute_url('uploads/imagenes/')}}'+fotos[0].nombre_foto
-                                }
-                                    emprendimientosSeleccionados.push(emprendimiento);
-                                    var title="<b>"+emprendimiento.razon_social+"</b><br/>"
-                                    var direccion="<b>"+emprendimiento.direccion+"</b><br/>"
-                                    var customPopup="<br/><a href='emprendimiento/"+emprendimiento.id+"'>Ver</a>";
-                                    L.marker([emprendimiento.latitud,emprendimiento.longitud]).addTo(marcadores)
-                                        .bindPopup(title+direccion+emprendimiento.descripcion + customPopup)
-
-                                    var card=`<div class='col-lg-3 col-md-6 col-sm-6'>
-                                        <div class='card' style='width: 18rem;'>
-                                            <img class='card-img-top' src='${url_card_foto}' alt='${emprendimiento.razon_social}' height='140'>
-                                            <div class='card-body'>
-                                                <h5 class='card-title'>${emprendimiento.razon_social}</h5>
-                                                <p class='card-text'>${emprendimiento.descripcion}</p>
-                                                <a href='/emprendimiento/${emprendimiento.id}' class='btn btn-primary'>Ver</a>
-                                            </div>
-                                        </div>            
-                                    </div>` 
-                                    $('div#emprendimientos_cards').append(card);                                    
-                            });
-                            }                        
+                            var tarjetas=cards(emprendimientosSeleccionados);
+                            $('div#emprendimientos_cards').append(tarjetas);
+                        }                        
                     })
                 });
-
-
         </script>
-
     {% endblock %}
 {% endblock %}

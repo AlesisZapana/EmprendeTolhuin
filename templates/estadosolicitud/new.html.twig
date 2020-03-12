@@ -1,11 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Estadosolicitud{% endblock %}
+{% block title %}Nuevo estado de solicitud{% endblock %}
 
 {% block body %}
-    <h1>Create new Estadosolicitud</h1>
+    <h1>Crear nuevo estado de solicitud</h1>
 
     {{ include('estadosolicitud/_form.html.twig') }}
 
-    <a href="{{ path('estadosolicitud_index') }}">back to list</a>
+    <a class="btn btn-primary btn-sm" href="{{ path('estadosolicitud_index') }}">Volver a lista</a>
 {% endblock %}

@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Solicitud{% endblock %}
+{% block title %}Solicitud de ingreso{% endblock %}
 {% block stylesheets %}
     <link rel="stylesheet" href="{{absolute_url('/assets/openlayers/ol.css')}}" type="text/css">
     <link rel="stylesheet" href="{{absolute_url('/assets/leaflet/leaflet.css')}}"/>
@@ -13,11 +13,10 @@
     </style>
 {% endblock %}
 {% block body %}
-    <h1>Nueva solicitud</h1>
+    <h1>Solicitud de ingreso</h1>
 
     {{ include('solicitud/_form.html.twig') }}
 
-    <a href="{{ path('solicitud_index') }}">back to list</a>
 {% endblock %}
 {% block javascripts %}
     <script type="text/javascript">

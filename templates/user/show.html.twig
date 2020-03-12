@@ -20,16 +20,15 @@
         </tbody>
     </table>    
 
-    <a class="btn btn-primary" href="{{ path('usuarios_lista') }}">Volver a la lista de usuarios</a>
+    <a class="btn btn-primary btn-sm" href="{{ path('usuarios_lista') }}">Volver a la lista de usuarios</a>
 
     {% if is_granted('ROLE_MUNICIPIO') %}   
-        <a class="btn btn-primary" href="{{ path('usuario_edit', {'id': usuario.id}) }}">editar</a>
-    {% endif %}
-    {% if is_granted('ROLE_ADMIN') %}
-        <form method="post" action="{{ path('usuario_delete', {'id': usuario.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+        <a class="btn btn-primary btn-sm" href="{{ path('usuario_edit', {'id': usuario.id}) }}">Editar</a>
+
+        <form method="post" action="{{ path('usuario_delete', {'id': usuario.id}) }}" onsubmit="return confirm('Seguro que desea eliminar?');">
             <input type="hidden" name="_method" value="DELETE">
             <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ usuario.id) }}">
-            <button class="btn">Eliminar</button>
+            <button class="btn btn-danger btn-sm">Eliminar</button>
         </form>
 
     {% endif %}

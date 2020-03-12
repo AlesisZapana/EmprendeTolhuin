@@ -1,0 +1,110 @@
+{% extends 'base.html.twig' %}
+{% block stylesheets %}
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.css">
+{% endblock %}
+{% block body %}
+    <div class="row">
+        <div class="col-lg-6">
+            <h1>Emprendimientos - Sectores Productivos</h1>
+            <canvas id="barras" width="400" height="400"></canvas>
+        </div>
+        <div class="col-lg-6">
+            <h1>Emprendimientos - Rubros</h1>
+            <canvas id="dona" width="400" height="400"></canvas>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
+    <script>
+    var sectores={'Primario':0, 'Secundario':0, 'Terciario':0, 'Cuaternario':0, 'Quinario':0};
+    var rubros={};
+    var relleno_colores=[];      
+    var bordes_colores=[];
+    fetch('https://192.168.2.111:8000/api/emprendimientos')
+    .then(function(response) {
+        return response.json();
+    })
+    .then(function(myJson) {
+        emprendimientos=myJson;
+        emprendimientos.forEach(emprendimiento => {
+            sectores[emprendimiento.sector]+=1;
+            if (isNaN(rubros[emprendimiento.rubro])) {
+                rubros[emprendimiento.rubro]=0;
+                r=Math.floor(Math.random()*256);
+                g=Math.floor(Math.random()*256);
+                b=Math.floor(Math.random()*256);
+                relleno_colores.push('rgba('+r+', '+g+', '+b+', 0.4)');
+                bordes_colores.push('rgba('+r+', '+g+', '+b+', 1)');
+            } 
+            rubros[emprendimiento.rubro]+=1;
+        });
+        var ctx = document.getElementById('barras');
+        var barras = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Primario', 'Secundario', 'Terciario', 'Cuaternario', 'Quinario'],
+                datasets: [{
+                    label: 'Número de emprendimientos',
+                    data: [sectores['Primario'],sectores['Secundario'], sectores['Terciario'],sectores['Cuaternario'], sectores['Quinario']],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        type: 'logarithmic',
+                        ticks: {
+                            // beginAtZero: true
+                            min: 0,
+                            max: 500,
+                            callback: function (value, index, values) {
+                                if (value === 1000) return "1000";
+                                if (value === 100) return "100";
+                                if (value === 10) return "10";
+                                if (value === 0) return "0";
+                                return null;
+                            }
+                        }
+                    }]                    
+                }
+            }
+        });
+        //
+        var grafico_dona = document.getElementById('dona');
+        var dona = new Chart(grafico_dona, {
+        type: 'doughnut',
+        data: {
+            labels: Object.keys(rubros),
+            datasets: [{
+                label: 'Num de emprendimientos',
+                data: Object.values(rubros),
+                backgroundColor:relleno_colores,
+                borderColor: bordes_colores,
+
+                }]
+        },
+        options: {
+            legend: {
+                display: false
+            }
+        }
+        });        
+    });
+
+    </script>
+{% endblock %}

@@ -1,7 +1,19 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Emprendimiento: {{emprendimiento.razonsocial}} {% endblock %}
-
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{absolute_url('/assets/openlayers/ol.css')}}" type="text/css">
+    <link rel="stylesheet" href="{{absolute_url('/assets/leaflet/leaflet.css')}}"/>
+    <script src="{{absolute_url('/assets/leaflet/leaflet.js')}}"></script>
+    <style>
+       #mapid {
+        height: 400px;
+        /* width: 90%; */
+      }
+      .leaflet-fade-anim .leaflet-container { will-change: transform !important; }
+      .leaflet-zoom-animated{will-change: transform !important;}
+    </style>
+{% endblock %}
 {% block body %}
     <h1>Emprendimiento: {{emprendimiento.razonsocial}} </h1>
     {% if emprendimiento.fotos is not empty %}    
@@ -63,6 +75,11 @@
             </tr>
         </tbody>
     </table>
+    <div class="row align-items-center my-5">
+        <div class="col-lg-10">
+            <div id="mapid"></div>
+        </div>        
+    </div>
 
     <a class="btn btn-primary" href="{{ path('emprendimiento_index') }}">Volver a inicio</a>
     {% if is_granted('ROLE_EMPRENDEDOR') %}
@@ -82,4 +99,19 @@
         <input type="hidden" name="_token" value="{{ csrf_token('descarga' ~ emprendimiento.id) }}">
         <button type="button" class="btn">Descargar info</button>
     </form> #}
+        {% block javascripts %}
+        
+        <script type="text/javascript">
+            var map = L.map('mapid').setView([{{emprendimiento.latitud}},{{emprendimiento.longitud}} ], 14);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+
+        </script>
+        
+        <script type="text/javascript">
+            marcador = L.marker([{{emprendimiento.latitud}},{{emprendimiento.longitud}}]);
+            marcador.addTo(map);
+        </script>
+    {% endblock %}
 {% endblock %}

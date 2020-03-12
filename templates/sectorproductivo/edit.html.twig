@@ -1,13 +1,13 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Sectorproductivo{% endblock %}
+{% block title %}Editar sector productivo{% endblock %}
 
 {% block body %}
-    <h1>Edit Sectorproductivo</h1>
+    <h1>Editar sector productivo</h1>
 
-    {{ include('sectorproductivo/_form.html.twig', {'button_label': 'Update'}) }}
+    {{ include('sectorproductivo/_form.html.twig', {'button_label': 'Editar'}) }}
 
-    <a href="{{ path('sectorproductivo_index') }}">back to list</a>
+    <a class="btn btn-primary btn-sm" href="{{ path('sectorproductivo_index') }}">Volver a lista</a>
 
     {{ include('sectorproductivo/_delete_form.html.twig') }}
 {% endblock %}

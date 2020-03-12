@@ -12,17 +12,27 @@ use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 
 class EmprendedorType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('username')
+            ->add('username',TextType::class,[
+                'label'=>'Nombre de Usuario',
+            ])
             ->add('apellido')
             ->add('nombre')
-            ->add('dni')
+            ->add('dni',IntegerType::class,[
+                'label'=>'DNI',
+                'attr'=>[
+                    'min'=>0,
+                ],
+            ])
             ->add('agreeTerms', CheckboxType::class, [
+                'label'=>'Confirmar',
                 'mapped' => false,
                 'constraints' => [
                     new IsTrue([
@@ -31,6 +41,7 @@ class EmprendedorType extends AbstractType
                 ],
             ])
             ->add('plainPassword', PasswordType::class, [
+                'label'=>'Contraseña',
                 // instead of being set onto the object directly,
                 // this is read and encoded in the controller
                 'mapped' => false,

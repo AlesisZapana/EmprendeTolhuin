@@ -78,14 +78,14 @@
         <form method="post" action="{{ path('solicitud_aprobar', {'id': solicitud.id}) }}" onsubmit="return confirm('Seguro que desea aprobar esta solicitud?');">
             <input type="hidden" name="_method" value="POST">
             <input type="hidden" name="_token" value="{{ csrf_token('update' ~ solicitud.id) }}">
-            <button class="btn">Aprobar solicitud</button>
+            <button class="btn btn-primary btn-sm">Aprobar solicitud</button>
         </form>
 
         {# rechaza la solicitud #}
         <form method="post" action="{{ path('solicitud_rechazar', {'id': solicitud.id}) }}" onsubmit="return confirm('Seguro que desea rechazar esta solicitud?');">
             <input type="hidden" name="_method" value="POST">
             <input type="hidden" name="_token" value="{{ csrf_token('rechazar' ~ solicitud.id) }}">
-            <button class="btn">Rechazar solicitud</button>
+            <button class="btn btn-primary btn-sm">Rechazar solicitud</button>
         </form>
     {% endif %}
 

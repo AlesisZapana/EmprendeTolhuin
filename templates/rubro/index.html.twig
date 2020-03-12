@@ -1,31 +1,31 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Rubro index{% endblock %}
+{% block title %}Lista de Rubros{% endblock %}
 
 {% block body %}
-    <h1>Rubro index</h1>
-    <a href="{{ path('rubro_new') }}">Create new</a>
+    <h1>Lista de Rubros</h1>
+    <a class="btn btn-primary btn-sm" href="{{ path('rubro_new') }}">Agregar nuevo</a>
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
                 <th>Tipo</th>
-                <th>actions</th>
+                <th>Sector Productivo</th>
+                <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
         {% for rubro in rubros %}
             <tr>
-                <td>{{ rubro.id }}</td>
                 <td>{{ rubro.tipo }}</td>
+                <td>{{rubro.sector}} </td>
                 <td>
-                    <a href="{{ path('rubro_show', {'id': rubro.id}) }}">show</a>
-                    <a href="{{ path('rubro_edit', {'id': rubro.id}) }}">edit</a>
+                    <a class="badge badge-primary" href="{{ path('rubro_show', {'id': rubro.id}) }}">Ver</a>
+                    <a class="badge badge-primary" href="{{ path('rubro_edit', {'id': rubro.id}) }}">Editar</a>
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="3">no records found</td>
+                <td colspan="3">Rubros no registrados</td>
             </tr>
         {% endfor %}
         </tbody>

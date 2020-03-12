@@ -1,17 +1,61 @@
 {% extends 'base.html.twig' %}
-{% block title %}Mis Emprendimientos{% endblock %}
+{% block title %}{{title}}{% endblock %}
 {% block body %}
-    {% for emprendimiento in emprendimientos %}
-        <div class="card" style="width: 18rem;">
-        {# si no hay imagen disponible, cargar una imagen del tamaño adecuado #}
-            {% if emprendimiento.fotos is not empty %}    
-            <img src="{{absolute_url('/uploads/imagenes/')}}{{emprendimiento.fotos[0]}}" class="card-img-top" alt="...">
-            {% endif %}
-            <div class="card-body">
-                <h5 class="card-title">{{emprendimiento.razonsocial}}</h5>
-                <p class="card-text">{{emprendimiento.descripcion}}</p>
-                <a href="{{ path('emprendimiento_show', {'id': emprendimiento.id}) }}" class="btn btn-primary">Ver</a>
+    {% if is_granted('ROLE_INVESTIGADOR') %}
+    <div class="row">
+    <div class="col-lg-3">
+    <a class="btn btn-primary btn-sm" href="{{ path('emprendimiento_new') }}">Nuevo emprendimiento</a>
+    </div>
+    <div class="col-lg-3">
+    <a class="btn btn-primary btn-sm" href="{{path('carga_lotes')}}">Carga de lotes</a>
+    </div>
+    <div class="col-lg-11 col-md-12 col-sm-12">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Razon Social</th>
+                    <th>Direccion</th>
+                    <th>Rubro</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for emprendimiento in emprendimientos %}
+                <tr>
+                    <td>{{ emprendimiento.razonsocial }}</td>
+                    <td>{{ emprendimiento.direccion }}</td>
+                    <td>{{ emprendimiento.rubro }}</td>
+                    <td>
+                        <a class="badge badge-primary" href="{{ path('emprendimiento_show', {'id': emprendimiento.id}) }}">Ver</a>
+                        <a class="badge badge-primary" href="{{ path('emprendimiento_edit', {'id': emprendimiento.id}) }}">Editar</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="5">No se encuentran registrados emprendimientos</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+        <div class="row">
+        {% for emprendimiento in emprendimientos %}
+        <div class="col-lg-4">
+            <div class="card" style="width: 15rem;">
+            {# si no hay imagen disponible, cargar una imagen del tamaño adecuado #}
+                {% if emprendimiento.fotos is not empty %}    
+                    {# agregar una altura y ancho igual para todas las fotos #}
+                    <img src="{{absolute_url('/uploads/imagenes/')}}{{emprendimiento.fotos[0]}}" class="card-img-top" height="130" alt="...">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{emprendimiento.razonsocial}}</h5>
+                    <p class="card-text">{{emprendimiento.descripcion}}</p>
+                    <a href="{{ path('emprendimiento_show', {'id': emprendimiento.id}) }}" class="btn btn-primary">Ver</a>
+                </div>
             </div>
         </div>
-    {% endfor %}
+        {% endfor %}
+        </div>
+    {% endif %}
 {% endblock %}

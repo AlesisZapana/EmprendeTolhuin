@@ -4,10 +4,13 @@ namespace App\Controller;
 
 use App\Entity\Emprendimiento;
 use App\Entity\Foto;
+use App\Entity\Rubro;
+use App\Entity\Sectorproductivo;
 use App\Form\EmprendimientoType;
 use App\Form\EmprendimientoEditType;
 use App\Repository\EmprendimientoRepository;
 use App\Repository\RubroRepository;
+use App\Repository\SectorproductivoRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -39,19 +42,13 @@ class EmprendimientoController extends AbstractController
     /**
      * @Route("/", name="emprendimiento_index", methods={"GET"})
      */
-    public function index(RubroRepository $rubroRepository, EmprendimientoRepository $emprendimientoRepository,SerializerInterface $serial,Request $request): Response
+    public function index(SectorproductivoRepository $sectorRepository, RubroRepository $rubroRepository, EmprendimientoRepository $emprendimientoRepository,SerializerInterface $serial,Request $request): Response
     {
-
-        // $emprendimientos=$emprendimientoRepository->findAll();
-        //$json_emprendimientos=$serializer->serialize($emprendimientos,'json');
-        // $json_emprendimientos=$serial->serialize($emprendimientos,'json',[
-        //     'groups' => ['emprendimiento'],
-        //     ]);
-        // $valores= $this->json(['algo'=>'otra']);
         return $this->render('emprendimiento/index.html.twig', [
             'emprendimientos' => $emprendimientoRepository->findAll(),
             'direccion'=>$request->getClientIp(),
             'rubros'=>$rubroRepository->findAll(),
+            'sectores'=>$sectorRepository->findAll(),
         ]);
     }
 
@@ -218,6 +215,7 @@ class EmprendimientoController extends AbstractController
                 'longitud'=>$emprendimiento->getLongitud(),
                 'ambito'=>$emprendimiento->getAmbito()->getTipoambito(),
                 'rubro'=>$emprendimiento->getRubro()->getTipo(),
+                'sector'=>$emprendimiento->getRubro()->getSector()->getNombre(),
                 'fotos'=>$arrayFotos,
             ];
         }
@@ -262,11 +260,35 @@ class EmprendimientoController extends AbstractController
     }
 
     /**
+     * @Route("/emprendimientos/descargar?formato={formato}&rubro={rubro}&sector={sector}", name="emprendimientos_descargar", methods={"GET"})
+     */
+    public function emprendimientos_descarga(String $formato,String $rubro,String $sector): Response
+    {
+        switch ($formato) {
+            case 'pdf':
+                $this->emprendimientos_pdf($rubro);
+                break;
+            case 'xlsx':
+                return $this->emprendimientos_xls($rubro);
+                break;
+            case 'csv':
+                return $this->emprendimientos_csv($rubro);
+                break;
+            default:
+                echo 'no disponible';
+                break;
+        }
+    }
+
+    /**
      * @Route("/emprendimientos/descarga/pdf/{rubro}", name="emprendimientos_pdf_descarga", methods={"GET"})
      */
-    public function emprendimientos_pdf(RubroRepository $rubroRepository,EmprendimientoRepository $emprendimientoRepository,$rubro): Response
+    public function emprendimientos_pdf($rubro): Response
     {
         // if ($this->isCsrfTokenValid('descarga'.$emprendimiento->getId(), $request->request->get('_token'))) {
+            $rubroRepository = $this->getDoctrine()->getRepository(Rubro::class);
+            $emprendimientoRepository = $this->getDoctrine()->getRepository(Emprendimiento::class);
+            $sectorproductivoRepository = $this->getDoctrine()->getRepository(Sectorproductivo::class);
             $pdfOptions=new Options();
             $pdfOptions->set('defaultFont','Arial');
 
@@ -274,13 +296,18 @@ class EmprendimientoController extends AbstractController
             
             $unRubro=$rubroRepository->findOneBy([
                 'tipo'=>$rubro]);
+            // $unSector=$sectorRepository->findOneBy([
+            //     'nombre'=>$sector,
+            // ]);
             
             if (is_null($unRubro)){
                 $emprendimientos=$emprendimientoRepository->findAll();
             }else{
                 $rubro_id=$unRubro->getId();
+                // $sector_id=$unSector->getId();
                 $emprendimientos=$emprendimientoRepository->findBy([
-                    'rubro'=>$rubro_id
+                    'rubro'=>$rubro_id,
+                    // 'rubro.sectorproductivo'=>$sector_id,
                 ]);
             }
             $html = $this->renderView('emprendimientos_pdf.html.twig',[
@@ -300,13 +327,17 @@ class EmprendimientoController extends AbstractController
     /**
      * @Route("/emprendimientos/descarga/xls/{rubro}",name="emprendimientos_xls_descarga",methods={"GET"})
      */
-    public function emprendimientos_xls(RubroRepository $rubroRepository,EmprendimientoRepository $emprendimientoRepository,$rubro): Response
+    public function emprendimientos_xls($rubro): Response
     {
+        $rubroRepository = $this->getDoctrine()->getRepository(Rubro::class);
+        $emprendimientoRepository = $this->getDoctrine()->getRepository(Emprendimiento::class);
+        $sectorproductivoRepository = $this->getDoctrine()->getRepository(Sectorproductivo::class);
+        
         $spreadsheet=new Spreadsheet();
 
         $sheet = $spreadsheet->getActiveSheet();
         $sheet->setTitle("Emprendimientos");
-        $encabezados=['Razon Social','Dirección','Rubro','Ámbito','Latitud','Longitud'];
+        $encabezados=['Razon Social','CUIT','Dirección','Descripción','Rubro','Sector Productivo','Ámbito','Latitud','Longitud'];
 
         $datos=[];
 
@@ -327,8 +358,11 @@ class EmprendimientoController extends AbstractController
         foreach ($emprendimientos as $emprendimiento) {
             $datos[]=[
                 $emprendimiento->getRazonsocial(),
+                $emprendimiento->getCuit(),
                 $emprendimiento->getDireccion(),
+                $emprendimiento->getDescripcion(),
                 $emprendimiento->getRubro()->getTipo(),
+                $emprendimiento->getRubro()->getSector()->getNombre(),
                 $emprendimiento->getAmbito()->getTipoambito(),
                 $emprendimiento->getLatitud(),
                 $emprendimiento->getLongitud(),
@@ -338,13 +372,13 @@ class EmprendimientoController extends AbstractController
         $sheet->fromArray(
                 $encabezados
             );
-        $sheet->getStyle('A1:F1')->getFont()->setBold(true);
+        $sheet->getStyle('A1:I1')->getFont()->setBold(true);
         $sheet->fromArray(
             $datos,
             NULL,
             'A2'
         );
-        // $sheet->setCellValue('A1', 'Hello World !');
+
         $writer=new Xlsx($spreadsheet);
 
         $fileName = 'emprendimientos-'.$rubro.'.xlsx';
@@ -359,8 +393,12 @@ class EmprendimientoController extends AbstractController
     /**
      * @Route("/emprendimientos/descarga/csv/{rubro}",name="emprendimientos_csv_descarga",methods={"GET"})
      */
-    public function emprendimientos_csv(RubroRepository $rubroRepository,EmprendimientoRepository $emprendimientoRepository,$rubro): Response
+    public function emprendimientos_csv($rubro): Response
     {
+        $rubroRepository = $this->getDoctrine()->getRepository(Rubro::class);
+        $emprendimientoRepository = $this->getDoctrine()->getRepository(Emprendimiento::class);
+        $sectorproductivoRepository = $this->getDoctrine()->getRepository(Sectorproductivo::class);
+
         $unRubro=$rubroRepository->findOneBy([
             'tipo'=>$rubro]);
         
@@ -392,10 +430,20 @@ class EmprendimientoController extends AbstractController
     public function mis_emprendimientos(EmprendimientoRepository $emprendimientoRepository,Security $security)
     {
         $user =$security->getUser();
-        return $this->render('user/mis-emprendimientos.html.twig', [
-            'usuario' => $user,
-            'emprendimientos'=>$user->getEmprendimientos(),
-        ]);
+
+        if ($this->isGranted('ROLE_INVESTIGADOR')) {
+            return $this->render('user/mis-emprendimientos.html.twig', [
+                'title'=>'Emprendimientos',
+                'usuario' => $user,
+                'emprendimientos'=>$emprendimientoRepository->findAll(),
+            ]);
+        }else{
+            return $this->render('user/mis-emprendimientos.html.twig', [
+                'title'=>'Mis Emprendimientos',
+                'usuario' => $user,
+                'emprendimientos'=>$user->getEmprendimientos(),
+            ]);
+        }
     }
 
     /**
@@ -458,6 +506,18 @@ class EmprendimientoController extends AbstractController
         return $this->render('emprendimiento/edit.html.twig', [
             'emprendimiento' => $emprendimiento,
             'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/estadisticas",name="estadisticas", methods={"GET"})
+     */
+    public function estadisticas(SectorproductivoRepository $sectorRepository, RubroRepository $rubroRepository, EmprendimientoRepository $emprendimientoRepository,SerializerInterface $serial,Request $request): Response
+    {
+        return $this->render('emprendimiento/estadisticas.html.twig', [
+            'emprendimientos' => $emprendimientoRepository->findAll(),
+            'rubros'=>$rubroRepository->findAll(),
+            'sectores'=>$sectorRepository->findAll(),
         ]);
     }
 

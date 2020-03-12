@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+{% block stylesheets %}
+
+{% endblock %}
+{% block body %}
+<h1>Carga de Lotes</h1>
+Suba un archivo de tipo ODS o XLSX en el orden que se indica a continuación. Indicando además si es que incluye o no los encabezados.
+<br/>
+<strong> Razon_Social</strong> <strong>CUIT</strong> <strong>Direccion</strong> <strong>Descripcion</strong> <strong>Rubro</strong> <strong>Sector</strong> <strong>Ambito</strong> <strong>Latitud</strong> <strong>Longitud</strong>
+<br/><br/>
+<img src="{{absolute_url('/uploads/imagenes/')}}ayuda-formato-subir.png" class="d-block w-100"  alt="...">
+{{ form_start(form) }}
+    <div class="col-lg-4 col-md-8 col-sm-12">
+    {{ form_widget(form) }}
+    </div>
+    <button class="btn btn-primary">{{ button_label|default('Crear') }}</button>
+{{ form_end(form) }}
+
+{% for label, messages in app.flashes %}
+    {% for message in messages %}
+        <div class="alert alert-{{label}} alert-dismissible fade show" role="alert">
+            {{message}}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    {% endfor %}
+{% endfor %}
+
+{% endblock %}
+{% block javascripts %}
+<script src="https://cdn.jsdelivr.net/npm/bs-custom-file-input/dist/bs-custom-file-input.min.js"></script>
+<script>
+    $(document).ready(function () {
+        bsCustomFileInput.init()
+    });
+</script>
+{% endblock %}

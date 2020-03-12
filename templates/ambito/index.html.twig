@@ -1,35 +1,33 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Ambito index{% endblock %}
+{% block title %}Ámbitos{% endblock %}
 
 {% block body %}
-    <h1>Ambito index</h1>
-
+    <h1>Lista de Ámbitos</h1>
+    <a class="btn btn-primary btn-sm" href="{{ path('ambito_new') }}">Agregar Ámbito</a>
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
                 <th>Tipoambito</th>
-                <th>actions</th>
+                <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
         {% for ambito in ambitos %}
             <tr>
-                <td>{{ ambito.id }}</td>
                 <td>{{ ambito.tipoambito }}</td>
                 <td>
-                    <a href="{{ path('ambito_show', {'id': ambito.id}) }}">show</a>
-                    <a href="{{ path('ambito_edit', {'id': ambito.id}) }}">edit</a>
+                    <a class="badge badge-primary" href="{{ path('ambito_show', {'id': ambito.id}) }}">Ver</a>
+                    <a class="badge badge-primary" href="{{ path('ambito_edit', {'id': ambito.id}) }}">Editar</a>
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="3">no records found</td>
+                <td colspan="3">No se encontraron ámbitos</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    <a href="{{ path('ambito_new') }}">Create new</a>
+    
 {% endblock %}

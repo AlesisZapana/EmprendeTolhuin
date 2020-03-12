@@ -42,7 +42,7 @@ class SecurityController extends AbstractController
     }
 
     /**
-     * @IsGranted("ROLE_ADMIN")
+     * @IsGranted("ROLE_MUNICIPIO")
      * @Route("/usuarios", name="usuarios_lista")
      */
     public function usuarios_lista(UserRepository $userRepository): Response
@@ -53,7 +53,7 @@ class SecurityController extends AbstractController
     }
 
     /**
-     * @IsGranted("ROLE_ADMIN")
+     * @IsGranted("ROLE_MUNICIPIO")
      * @Route("/usuario/{id}", name="usuario_show", methods={"GET"})
      */
     public function usuario_show(User $user): Response
@@ -76,7 +76,7 @@ class SecurityController extends AbstractController
     }
 
     /**
-     * @IsGranted("ROLE_ADMIN")
+     * @IsGranted("ROLE_MUNICIPIO")
      * @Route("/usuario/{id}/edit", name="usuario_edit", methods={"GET","POST"})
      */
     public function edit(Request $request, User $usuario): Response
@@ -114,7 +114,7 @@ class SecurityController extends AbstractController
             return $this->redirectToRoute('usuarios_lista');
         }
 
-        return $this->render('registration/register.html.twig', [
+        return $this->render('registration/mi-edit.html.twig', [
             'mensaje'=> 'Editar mi usuario',
             'usuario' => $usuario,
             'registrationForm' => $form->createView(),
@@ -123,7 +123,7 @@ class SecurityController extends AbstractController
     }
 
     /**
-     * @IsGranted("ROLE_ADMIN")
+     * @IsGranted("ROLE_MUNICIPIO")
      * @Route("/usuario/{id}", name="usuario_delete", methods={"DELETE"})
      */
     public function delete(Request $request, User $user): Response

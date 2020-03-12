@@ -1,16 +1,12 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Ambito{% endblock %}
+{% block title %}Ámbito{% endblock %}
 
 {% block body %}
-    <h1>Ambito</h1>
+    <h1>Ámbito: {{ambito.tipoambito}} </h1>
 
     <table class="table">
         <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ ambito.id }}</td>
-            </tr>
             <tr>
                 <th>Tipoambito</th>
                 <td>{{ ambito.tipoambito }}</td>
@@ -18,9 +14,9 @@
         </tbody>
     </table>
 
-    <a href="{{ path('ambito_index') }}">back to list</a>
+    <a class="btn btn-primary btn-sm" href="{{ path('ambito_index') }}">Volver a lista</a>
 
-    <a href="{{ path('ambito_edit', {'id': ambito.id}) }}">edit</a>
+    <a class="btn btn-primary btn-sm" href="{{ path('ambito_edit', {'id': ambito.id}) }}">Editar</a>
 
     {{ include('ambito/_delete_form.html.twig') }}
 {% endblock %}

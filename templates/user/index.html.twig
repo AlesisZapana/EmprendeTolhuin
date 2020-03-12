@@ -3,15 +3,15 @@
 {% block title %}Usuarios registrados{% endblock %}
 
 {% block body %}
-    <a href="{{path('usuario_show_personal')}}">Mi usuario</a>
-    <a href="{{path('usuario_edit_personal')}}">Editar Mi usuario</a>
-    <a href="{{path('app_register')}}">Registrar nuevo usuario</a>
+    <a class="btn btn-primary btn-sm" href="{{path('usuario_show_personal')}}">Mi usuario</a>
+    <a class="btn btn-primary btn-sm" href="{{path('usuario_edit_personal')}}">Editar Mi usuario</a>
+    <a class="btn btn-primary btn-sm" href="{{path('app_register')}}">Registrar nuevo usuario</a>
     <table class="table">
         <thead>
             <tr>
                 <th>Nombre</th>
                 <th>Roles</th>
-                <th>actions</th>
+                <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
@@ -24,8 +24,8 @@
                     {% endfor %}
                 </td>
                 <td>
-                    <a href="{{ path('usuario_show', {'id': usuario.id}) }}">show</a>
-                    <a href="{{ path('usuario_edit', {'id': usuario.id}) }}">edit</a>
+                    <a class="badge badge-primary" href="{{ path('usuario_show', {'id': usuario.id}) }}">Ver</a>
+                    <a class="badge badge-primary" href="{{ path('usuario_edit', {'id': usuario.id}) }}">Editar</a>
                 </td>
             </tr>
         {% else %}

@@ -1,11 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Rubro{% endblock %}
+{% block title %}Nuevo Rubro{% endblock %}
 
 {% block body %}
-    <h1>Create new Rubro</h1>
+    <h1>Crear nuevo rubro</h1>
 
     {{ include('rubro/_form.html.twig') }}
 
-    <a href="{{ path('rubro_index') }}">back to list</a>
+    <a class="btn btn-primary btn-sm" href="{{ path('rubro_index') }}">Volver a lista</a>
 {% endblock %}

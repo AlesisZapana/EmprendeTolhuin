@@ -1,13 +1,13 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Rubro{% endblock %}
+{% block title %}Editar Rubro{% endblock %}
 
 {% block body %}
     <h1>Editar Rubro</h1>
 
-    {{ include('rubro/_form.html.twig', {'button_label': 'Update'}) }}
+    {{ include('rubro/_form.html.twig', {'button_label': 'Actualizar'}) }}
     {{ include('rubro/_delete_form.html.twig') }}
 
-    <a href="{{ path('rubro_index') }}">back to list</a>
+    <a class="btn btn-primary btn-sm" href="{{ path('rubro_index') }}">Volver a lista</a>
 
 {% endblock %}

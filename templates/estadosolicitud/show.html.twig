@@ -1,16 +1,12 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Estadosolicitud{% endblock %}
+{% block title %}Estado de Solicitud{% endblock %}
 
 {% block body %}
-    <h1>Estadosolicitud</h1>
+    <h1>Estado de solicitud:{{estadosolicitud.nombre}}</h1>
 
     <table class="table">
         <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ estadosolicitud.id }}</td>
-            </tr>
             <tr>
                 <th>Nombre</th>
                 <td>{{ estadosolicitud.nombre }}</td>
@@ -18,9 +14,9 @@
         </tbody>
     </table>
 
-    <a href="{{ path('estadosolicitud_index') }}">back to list</a>
+    <a class="btn btn-primary btn-sm" href="{{ path('estadosolicitud_index') }}">Volver a lista</a>
 
-    <a href="{{ path('estadosolicitud_edit', {'id': estadosolicitud.id}) }}">edit</a>
+    <a class="btn btn-primary btn-sm" href="{{ path('estadosolicitud_edit', {'id': estadosolicitud.id}) }}">Editar</a>
 
     {{ include('estadosolicitud/_delete_form.html.twig') }}
 {% endblock %}

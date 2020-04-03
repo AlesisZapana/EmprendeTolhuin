@@ -81,18 +81,17 @@
         </div>        
     </div>
 
-    <a class="btn btn-primary" href="{{ path('emprendimiento_index') }}">Volver a inicio</a>
-    {% if is_granted('ROLE_EMPRENDEDOR') %}
-        <a class="btn btn-primary" href="{{ path('mi_emprendimiento_editar',{'id':emprendimiento.id}) }}">editar</a>
-    {% endif %}
+    <a class="btn btn-primary btn-sm" href="{{ path('emprendimiento_index') }}">Volver a inicio</a>
     {% if is_granted('ROLE_INVESTIGADOR') %}
-        <a class="btn btn-primary" href="{{ path('emprendimiento_edit', {'id': emprendimiento.id}) }}">editar</a>
+        <a class="btn btn-primary btn-sm" href="{{ path('emprendimiento_edit', {'id': emprendimiento.id}) }}">editar</a>
+    {% elseif is_granted('ROLE_EMPRENDEDOR') %}
+        <a class="btn btn-primary btn-sm" href="{{ path('mi_emprendimiento_editar',{'id':emprendimiento.id}) }}">Editar</a>
     {% endif %}
     
     {# {% if is_granted('ROLE_ADMIN') %}
         {{ include('emprendimiento/_delete_form.html.twig') }}
     {% endif %} #}
-    <a class="btn btn-primary" target="_blank" href="{{ path('emprendimiento_ficha_descarga', {'id': emprendimiento.id}) }}">Descarga</a>
+    <a class="btn btn-primary btn-sm" target="_blank" href="{{ path('emprendimiento_ficha_descarga', {'id': emprendimiento.id}) }}">Descarga</a>
     
     {# <form method="post" action="{{ path('emprendimiento_descarga', {'id': emprendimiento.id}) }}">
         <input type="hidden" name="_method" value="POST">

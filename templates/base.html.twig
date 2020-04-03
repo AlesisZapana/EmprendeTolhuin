@@ -28,13 +28,12 @@
                     <a class="nav-link" href="{{path('mis_emprendimientos')}}">Emprendimientos</a>
                     </li>
                 {% endif %}
-                {% if is_granted('ROLE_MUNICIPIO') %}
-                    <li class="nav-item">
-                    <a class="nav-link" href="{{path('estadosolicitud_index')}}">Estados</a>
-                    </li>
+                {% if is_granted('ROLE_INVESTIGADOR') %}
                     <li class="nav-item">
                     <a class="nav-link" href="{{path('solicitud_index')}}">Solicitudes</a>
                     </li>
+                {% endif %}                
+                {% if is_granted('ROLE_MUNICIPIO') %}
                     <li class="nav-item">
                     <a class="nav-link" href="{{path('usuarios_lista')}}">Usuarios</a>
                     </li>

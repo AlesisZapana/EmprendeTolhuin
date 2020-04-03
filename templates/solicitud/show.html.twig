@@ -62,15 +62,15 @@
         </tbody>
     </table>
 
-    <a class="btn btn-primary" href="{{ path('solicitud_index') }}">Volver a lista</a>
+    <a class="btn btn-primary btn-sm" href="{{ path('solicitud_index') }}">Volver a lista</a>
 
-    <a class="btn btn-primary" href="{{ path('solicitud_edit', {'id': solicitud.id}) }}">Editar</a>
+    <a class="btn btn-primary btn-sm" href="{{ path('solicitud_edit', {'id': solicitud.id}) }}">Editar</a>
 
     {# redirige a la creación de usuario #}
-    <a class="btn btn-primary" href="{{path('solicitud_emprendedor',{'id':solicitud.id})}}">Crear Usuario</a>
+    <a class="btn btn-primary btn-sm" href="{{path('solicitud_emprendedor',{'id':solicitud.id})}}">Crear Usuario</a>
 
     {# redirige a la creación de emprendimiento #}
-    <a class="btn btn-primary" href="{{path('solicitud_emprendimiento',{'id':solicitud.id})}}">Crear Emprendimiento</a>
+    <a class="btn btn-primary btn-sm" href="{{path('solicitud_emprendimiento',{'id':solicitud.id})}}">Crear Emprendimiento</a>
 
     {% if solicitud.estado=="Pendiente" %}
         {# aprueba la solicitud #}

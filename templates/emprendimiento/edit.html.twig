@@ -15,10 +15,12 @@
 {% block body %}
     <h1>Editar Emprendimiento</h1>
 
-    {{ include('emprendimiento/_form.html.twig', {'button_label': 'Update'}) }}
-    {{ include('emprendimiento/_delete_form.html.twig') }}
+    {{ include('emprendimiento/_form.html.twig', {'button_label': 'Actualizar'}) }}
+    {% if is_granted('ROLE_MUNICIPIO') %}
+        {{ include('emprendimiento/_delete_form.html.twig') }}
+    {% endif %}    
 
-    <a href="{{ path('emprendimiento_index') }}">Volver a la lista</a>
+    <a class="btn btn-primary btn-sm" href="{{ path('emprendimiento_index') }}">Volver a la lista</a>
 
 {% endblock %}
 {% block javascripts %}

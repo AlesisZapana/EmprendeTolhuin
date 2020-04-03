@@ -19,16 +19,16 @@ class SolicitudType extends AbstractType
     {
         $builder
             ->add('titularnombre',TextType::class,[
-                'label'=>'Titular Nombre'
+                'label'=>'Titular Nombre',
             ])
             ->add('titularapellido',TextType::class,[
-                'label'=>'Titular Apellido'
+                'label'=>'Titular Apellido',
             ])
             ->add('dni',IntegerType::class,[
                 'label'=>'DNI',
                 'attr'=>[
                     'min'=>0,
-                ]
+                ],
             ])
             ->add('telefono',IntegerType::class,[
                 'label'=>'Teléfono'

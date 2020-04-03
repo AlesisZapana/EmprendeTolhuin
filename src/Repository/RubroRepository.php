@@ -22,19 +22,20 @@ class RubroRepository extends ServiceEntityRepository
     // /**
     //  * @return Rubro[] Returns an array of Rubro objects
     //  */
-    /*
-    public function findByExampleField($value)
+    
+    public function findRubrosDistintos()
     {
-        return $this->createQueryBuilder('r')
-            ->andWhere('r.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('r.id', 'ASC')
-            ->setMaxResults(10)
+        return $this->createQueryBuilder('rubro')
+            ->select('rubro.tipo')
+            // ->andWhere('rubro.exampleField = :val')
+            // ->setParameter('val', $value)
+            // ->orderBy('rubro.id', 'ASC')
+            // ->setMaxResults(10)
+            ->addGroupBy('rubro.tipo')
             ->getQuery()
             ->getResult()
         ;
     }
-    */
 
     /*
     public function findOneBySomeField($value): ?Rubro

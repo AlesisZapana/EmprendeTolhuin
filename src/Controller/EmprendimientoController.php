@@ -44,10 +44,11 @@ class EmprendimientoController extends AbstractController
      */
     public function index(SectorproductivoRepository $sectorRepository, RubroRepository $rubroRepository, EmprendimientoRepository $emprendimientoRepository,SerializerInterface $serial,Request $request): Response
     {
+        $rubros=$rubroRepository->findRubrosDistintos();
         return $this->render('emprendimiento/index.html.twig', [
             'emprendimientos' => $emprendimientoRepository->findAll(),
             'direccion'=>$request->getClientIp(),
-            'rubros'=>$rubroRepository->findAll(),
+            'rubros'=>$rubros,
             'sectores'=>$sectorRepository->findAll(),
         ]);
     }
